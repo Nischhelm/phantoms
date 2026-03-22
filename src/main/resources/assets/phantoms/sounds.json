@@ -1,0 +1,109 @@
+{
+    "entity.phantom.ambient": {
+        "sounds": [
+            {
+                "name": "phantoms:mob/phantom/idle1",
+                "volume": 0.8
+            },
+            {
+                "name": "phantoms:mob/phantom/idle2",
+                "volume": 0.8
+            },
+            {
+                "name": "phantoms:mob/phantom/idle3",
+                "volume": 0.8
+            },
+            {
+                "name": "phantoms:mob/phantom/idle4",
+                "volume": 0.8
+            },
+            {
+                "name": "phantoms:mob/phantom/idle5",
+                "volume": 0.8
+            }
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.ambient"
+    },
+    "entity.phantom.bite": {
+        "sounds": [
+            "phantoms:mob/phantom/bite1",
+            "phantoms:mob/phantom/bite2"
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.bite"
+    },
+    "entity.phantom.death": {
+        "sounds": [
+            "phantoms:mob/phantom/death1",
+            "phantoms:mob/phantom/death2",
+            "phantoms:mob/phantom/death3"
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.death"
+    },
+    "entity.phantom.flap": {
+        "sounds": [
+            {
+                "name": "phantoms:mob/phantom/flap1",
+                "volume": 0.9
+            },
+            {
+                "name": "phantoms:mob/phantom/flap2",
+                "volume": 0.9
+            },
+            {
+                "name": "phantoms:mob/phantom/flap3",
+                "volume": 0.9
+            },
+            {
+                "name": "phantoms:mob/phantom/flap4",
+                "volume": 0.9
+            },
+            {
+                "name": "phantoms:mob/phantom/flap5",
+                "volume": 0.9
+            },
+            {
+                "name": "phantoms:mob/phantom/flap6",
+                "volume": 0.9
+            }
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.flap"
+    },
+    "entity.phantom.hurt": {
+        "sounds": [
+            {
+                "name": "phantoms:mob/phantom/hurt1",
+                "volume": 0.75
+            },
+            {
+                "name": "phantoms:mob/phantom/hurt2",
+                "volume": 0.75
+            },
+            {
+                "name": "phantoms:mob/phantom/hurt3",
+                "volume": 0.75
+            }
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.hurt"
+    },
+    "entity.phantom.swoop": {
+        "sounds": [
+            {
+                "name": "phantoms:mob/phantom/swoop1",
+                "volume": 0.7
+            },
+            {
+                "name": "phantoms:mob/phantom/swoop2",
+                "volume": 0.7
+            },
+            {
+                "name": "phantoms:mob/phantom/swoop3",
+                "volume": 0.7
+            },
+            {
+                "name": "phantoms:mob/phantom/swoop4",
+                "volume": 0.7
+            }
+        ],
+        "subtitle": "subtitles.phantoms.entity.phantom.swoop"
+    }
+}

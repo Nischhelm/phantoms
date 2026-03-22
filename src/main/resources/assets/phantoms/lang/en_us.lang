@@ -1,0 +1,19 @@
+item.phantoms.phantom_membrane.name=Phantom Membrane
+
+entity.phantoms.phantom.name=Phantom
+
+effect.phantoms.slow_falling=Slow Falling
+
+potion.effect.phantoms.slow_falling=Potion of Slow Falling
+splash_potion.effect.phantoms.slow_falling=Splash Potion of Slow Falling
+lingering_potion.effect.phantoms.slow_falling=Lingering Potion of Slow Falling
+tipped_arrow.effect.phantoms.slow_falling=Arrow of Slow Falling
+
+subtitles.phantoms.entity.phantom.ambient=Phantom screeches
+subtitles.phantoms.entity.phantom.bite=Phantom bites
+subtitles.phantoms.entity.phantom.death=Phantom dies
+subtitles.phantoms.entity.phantom.flap=Phantom flaps
+subtitles.phantoms.entity.phantom.hurt=Phantom hurts
+subtitles.phantoms.entity.phantom.swoop=Phantom swoops
+
+effect.phantoms.slow_falling.0.desc=Reduces the speed at which entities fall.
