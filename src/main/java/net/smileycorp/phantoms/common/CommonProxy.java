@@ -1,5 +1,8 @@
 package net.smileycorp.phantoms.common;
 
+import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -18,8 +21,8 @@ public class CommonProxy {
 	}
 
 	public void init(FMLInitializationEvent event) {
-
 		if (Loader.isModLoaded("tconstruct")) TinkersConstructIntegration.registerRecipes();
+		LootTableList.register(Constants.PHANTOM_DROPS);
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {}
