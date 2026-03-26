@@ -35,12 +35,13 @@ public class EntityPhantom extends EntityFlying implements IMob {
     protected void entityInit() {
         super.entityInit();
         dataManager.register(SIZE, 0);
-        setSize(0);
     }
 
     @Override
     protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
         ConfigHandler.phantomAttributes.applyAttributes(this);
+        setSize(0);
     }
 
     @Override
