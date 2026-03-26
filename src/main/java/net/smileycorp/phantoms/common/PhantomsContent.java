@@ -25,8 +25,10 @@ public class PhantomsContent {
 
     public static final PotionSlowFalling SLOW_FALLING = new PotionSlowFalling();
 
-    public static final PotionType SLOW_FALLING_POTION = new PotionType(Constants.name("slow_falling"), new PotionEffect(SLOW_FALLING, 1800));
-    public static final PotionType EXTENDED_SLOW_FALLING_POTION = new PotionType(Constants.name("extended_slow_falling"), new PotionEffect(SLOW_FALLING, 4800));
+    public static final PotionType SLOW_FALLING_POTION = new PotionType(Constants.name("slow_falling"),
+            new PotionEffect(SLOW_FALLING, 1800)).setRegistryName(Constants.loc("slow_falling"));
+    public static final PotionType EXTENDED_SLOW_FALLING_POTION = new PotionType(Constants.name("slow_falling"),
+            new PotionEffect(SLOW_FALLING, 4800)).setRegistryName(Constants.loc("extended_slow_falling"));
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
