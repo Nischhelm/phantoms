@@ -1,6 +1,9 @@
 package net.smileycorp.phantoms.client;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -10,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.smileycorp.phantoms.common.CommonProxy;
 import net.smileycorp.phantoms.common.Constants;
+import net.smileycorp.phantoms.common.PhantomsContent;
 import net.smileycorp.phantoms.common.entities.EntityPhantom;
 
 @EventBusSubscriber(value = Side.CLIENT, modid= Constants.MODID)
@@ -32,6 +36,8 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomModelResourceLocation(PhantomsContent.PHANTOM_MEMBRANE, 0,
+				new ModelResourceLocation(PhantomsContent.PHANTOM_MEMBRANE.getRegistryName().toString()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityPhantom.class, RenderPhantom::new);
 	}
 	

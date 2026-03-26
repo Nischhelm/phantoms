@@ -59,4 +59,9 @@ public class ModelPhantom extends ModelBase {
         head.addBox(-4, -2, -5, 7, 3, 5);
     }
 
+    @Override
+    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        body.render(scale);
+    }
+    
 }
