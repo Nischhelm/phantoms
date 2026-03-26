@@ -2,7 +2,6 @@ package net.smileycorp.phantoms.client;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.ModelVillager;
 import net.minecraft.entity.Entity;
 
 public class ModelPhantom extends ModelBase {
