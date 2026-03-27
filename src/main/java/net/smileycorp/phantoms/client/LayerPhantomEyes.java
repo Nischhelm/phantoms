@@ -22,7 +22,6 @@ public class LayerPhantomEyes implements LayerRenderer<EntityPhantom> {
     public void doRenderLayer(EntityPhantom entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         renderer.bindTexture(TEXTURE);
         GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(!entity.isInvisible());
@@ -34,7 +33,6 @@ public class LayerPhantomEyes implements LayerRenderer<EntityPhantom> {
         render.setupFogColor(false);
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
     }
 
     @Override
