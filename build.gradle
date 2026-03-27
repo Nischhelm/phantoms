@@ -92,6 +92,7 @@ dependencies {
     compileOnly "curse.maven:mantle-74924:2713386"
 	compileOnly "curse.maven:tconstruct-74072:2902483"
     compileOnly "curse.maven:constructsarmory-287683:3174535"
+    compileOnly "curse.maven:thermalfoundation-222880:2926428"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
