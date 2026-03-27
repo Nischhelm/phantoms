@@ -3,6 +3,7 @@ package net.smileycorp.phantoms.common;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +18,16 @@ public class PotionSlowFalling extends Potion {
         super(false, 15978425);
         setPotionName("effect.phantoms.slow_falling");
         setRegistryName(Constants.loc("slow_falling"));
+    }
+
+    @Override
+    public boolean isReady(int duration, int amplifier) {
+        return true;
+    }
+
+    @Override
+    public void performEffect(EntityLivingBase entity, int amplifier) {
+        entity.fallDistance = entity.isElytraFlying() ? 1 : 0;
     }
 
     @Override

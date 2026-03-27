@@ -16,4 +16,4 @@ subtitles.phantoms.entity.phantom.flap=Phantom flaps
 subtitles.phantoms.entity.phantom.hurt=Phantom hurts
 subtitles.phantoms.entity.phantom.swoop=Phantom swoops
 
-effect.phantoms.slow_falling.0.desc=Reduces the speed at which entities fall.
+effect.phantoms.slow_falling.desc=Decreases falling speed and negates fall damage.
