@@ -1,5 +1,7 @@
 {
+  "required": true,
   "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
   "package": "net.smileycorp.phantoms.mixin",
   "refmap": "mixins.phantoms.refmap.json",
   "mixins": [
