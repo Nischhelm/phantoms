@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.smileycorp.phantoms.common.entities.EntityPhantom;
+import net.smileycorp.phantoms.common.potions.PotionSlowFalling;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID)
 public class PhantomsContent {

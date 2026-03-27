@@ -1,4 +1,4 @@
-package net.smileycorp.phantoms.common;
+package net.smileycorp.phantoms.common.potions;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -9,6 +9,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.smileycorp.phantoms.common.Constants;
 
 public class PotionSlowFalling extends Potion {
 
