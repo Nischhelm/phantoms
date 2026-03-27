@@ -62,5 +62,19 @@ public class ModelPhantom extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         body.render(scale);
     }
-    
+
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity) {
+        float t = entity.getEntityId() * 3f + ageInTicks * 7.448451f * (float) Math.PI / 180f;
+        float flap = (float) Math.cos(t) * 16f * (float) Math.PI / 180f;
+        leftWing.rotateAngleZ = flap;
+        leftWingTip.rotateAngleZ = flap;
+        rightWing.rotateAngleZ = -flap;
+        rightWingTip.rotateAngleZ = -flap;
+        float tailSwing = -(5 + (float) Math.cos(t * 2f) * 5f) * (float) Math.PI / 180f;
+        tail.rotateAngleX = tailSwing;
+        tailTip.rotateAngleX = tailSwing;
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entity);
+    }
+
 }

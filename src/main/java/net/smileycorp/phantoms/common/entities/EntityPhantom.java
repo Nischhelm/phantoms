@@ -12,6 +12,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +48,19 @@ public class EntityPhantom extends EntityFlying implements IMob {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (world.isRemote) return;
+        if (world.isRemote) {
+            float offset = getEntityId() * 3f + ticksExisted;
+            float flap = (float) Math.cos(offset  * 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
+            float nextFlap = (float) Math.cos(offset  * 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
+            if (flap > 0 && nextFlap <= 0) playSound(PhantomsSoundEvents.PHANTOM_FLAP, 0.95f + rand.nextFloat() * 0.05f, 0.95f + rand.nextFloat() * 0.05f);
+            float angle = rotationYaw * (float) Math.PI / 180f;
+            float wingX = (float) Math.cos(angle) * (1.3f + 0.21f * getSize());
+            float wingY = (0.3f + flap * 0.45f) * (getSize() * 0.2f + 1f);
+            float wingZ = (float) Math.sin(angle) * (1.3f + 0.21f * getSize());
+            world.spawnParticle(EnumParticleTypes.TOWN_AURA, posX + wingX, posY + wingY, posZ + wingZ, 0, 0, 0);
+            world.spawnParticle(EnumParticleTypes.TOWN_AURA, posX - wingX, posY + wingY, posZ - wingZ, 0, 0, 0);
+            return;
+        }
         if (world.getDifficulty() == EnumDifficulty.PEACEFUL) setDead();
         if (!isEntityAlive() |! world.isDaytime() |! ConfigHandler.phantomsBurn) return;
         float light = getBrightness();

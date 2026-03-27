@@ -13,6 +13,7 @@ public class RenderPhantom extends RenderLiving<EntityPhantom> {
 
     public RenderPhantom(RenderManager rm) {
         super(rm, new ModelPhantom(), 0.75f);
+        addLayer(new LayerPhantomEyes(this));
     }
     
     @Override
@@ -24,6 +25,7 @@ public class RenderPhantom extends RenderLiving<EntityPhantom> {
 	protected void preRenderCallback(EntityPhantom phantom, float partialTicks) {
         float scale = 1 + 0.15f * phantom.getSize();
         GlStateManager.scale(scale, scale, scale);
+        GlStateManager.translate(0.0F, 1.3125F, 0.1875F);
     }
 
     @Override
