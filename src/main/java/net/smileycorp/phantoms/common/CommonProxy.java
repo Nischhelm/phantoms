@@ -2,6 +2,8 @@ package net.smileycorp.phantoms.common;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
@@ -15,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.smileycorp.phantoms.common.entities.EntityPhantom;
 import net.smileycorp.phantoms.integration.TinkersConstructIntegration;
 
 @Mod.EventBusSubscriber
@@ -43,7 +46,13 @@ public class CommonProxy {
 	@SubscribeEvent
 	public static void worldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
+		GameRules gameRules = world.getGameRules();
+		if (!gameRules.hasRule("doInsomnia")) gameRules.addGameRule("doInsomnia", "true",
+				GameRules.ValueType.BOOLEAN_VALUE);
 		if (world.isRemote) return;
+		if (!ConfigHandler.phantomsSpawn) return;
+		if (!world.getGameRules().getBoolean("doInsomnia")) return;
+		if (world.getEntities(EntityPhantom.class, EntityPhantom::isEntityAlive).size() > ConfigHandler.spawnMax) return;
 		PhantomSpawner spawner = PhantomSpawner.get(world);
 		if (spawner != null) spawner.trySpawn();
 	}
