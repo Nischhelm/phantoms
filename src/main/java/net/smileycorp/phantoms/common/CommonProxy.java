@@ -2,7 +2,6 @@ package net.smileycorp.phantoms.common;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
