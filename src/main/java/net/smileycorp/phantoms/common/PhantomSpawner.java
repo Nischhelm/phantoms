@@ -26,7 +26,7 @@ public class PhantomSpawner {
 
     public void trySpawn() {
         if (nextSpawn-- > 0) return;
-        if (world.provider.hasSkyLight() && world.getSkylightSubtracted() < 11 - ConfigHandler.phantomSpawnLight) return;
+        if (world.provider.hasSkyLight() && world.getSkylightSubtracted() < 11 - ConfigHandler.spawnLight) return;
         Random rand = world.rand;
         nextSpawn = ConfigHandler.spawnDelay;
         if (ConfigHandler.spawnDelayVariation > 0) nextSpawn += rand.nextInt(ConfigHandler.spawnDelayVariation);
@@ -36,8 +36,9 @@ public class PhantomSpawner {
             if (!world.getDifficultyForLocation(pos).isHarderThan(rand.nextFloat() * 3f)) continue;
             NBTTagCompound nbt = player.getEntityData();
             if (!nbt.hasKey("ticksSinceLastSleep")) continue;
-            if (rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 0, Integer.MAX_VALUE))
-                    < ConfigHandler.sleeplessTicks) return;
+            int ticks = rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 0, Integer.MAX_VALUE));
+            if ((!ConfigHandler.invertSleeplessTicks && ticks < ConfigHandler.sleeplessTicks) ||
+                    (ConfigHandler.invertSleeplessTicks && ticks >= ConfigHandler.sleeplessTicks)) return;
             BlockPos pos1 = pos.add(rand.nextInt(21) - 10, rand.nextInt(15) + 20, rand.nextInt(21) - 10);
             if (!world.isAirBlock(pos1)) continue;
             for (int i = 0; i < 1 + rand.nextInt(world.getDifficulty().getDifficultyId() + 1); i++) {
