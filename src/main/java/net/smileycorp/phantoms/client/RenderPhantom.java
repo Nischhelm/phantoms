@@ -31,6 +31,6 @@ public class RenderPhantom extends RenderLiving<EntityPhantom> {
     @Override
     protected void applyRotations(EntityPhantom phantom, float ticks, float rotationYaw, float partialTicks) {
         super.applyRotations(phantom, ticks, rotationYaw, partialTicks);
-        GlStateManager.rotate(phantom.rotationPitch, 1, 0, 0);
+        GlStateManager.rotate(phantom.rotationPitch, -1, 0, 0);
     }
 }

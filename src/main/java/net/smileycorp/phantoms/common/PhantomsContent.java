@@ -19,7 +19,7 @@ import net.smileycorp.phantoms.common.potions.PotionSlowFalling;
 public class PhantomsContent {
 
     public static final EntityEntry PHANTOM = EntityEntryBuilder.create().entity(EntityPhantom.class).id(Constants.loc("phantom"), 167)
-            .name(Constants.name("phantom")).egg(4411786, 8978176).tracker(8, 3, true).build();
+            .name(Constants.name("phantom")).egg(4411786, 8978176).tracker(128, 3, true).build();
 
     public static final Item PHANTOM_MEMBRANE = new Item().setCreativeTab(CreativeTabs.BREWING)
             .setRegistryName(Constants.loc("phantom_membrane")).setUnlocalizedName(Constants.name("phantom_membrane"));
