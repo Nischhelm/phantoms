@@ -1,24 +1,21 @@
 package net.smileycorp.phantoms.common.entities;
 
-import net.minecraft.entity.EntityFlying;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.smileycorp.atlas.api.entity.ai.FlyingMoveControl;
 import net.smileycorp.phantoms.common.ConfigHandler;
 import net.smileycorp.phantoms.common.Constants;
 import net.smileycorp.phantoms.common.PhantomsSoundEvents;
@@ -27,15 +24,25 @@ public class EntityPhantom extends EntityFlying implements IMob {
 
     private static final DataParameter<Integer> SIZE = EntityDataManager.<Integer>createKey(EntityPhantom.class, DataSerializers.VARINT);
 
+    private AttackState attackState = AttackState.CIRCLING;
+    private BlockPos targetPos = BlockPos.ORIGIN;
+
     public EntityPhantom(World world) {
         super(world);
-        moveHelper = new EntityFlyHelper(this);
+        moveHelper = new FlyingMoveControl(this);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
         dataManager.register(SIZE, 0);
+    }
+
+    @Override
+    protected void initEntityAI() {
+        tasks.addTask(1, new EntityAIPhantomSwoop(this));
+        tasks.addTask(2, new EntityAIPhantomCircle(this));
+        targetTasks.addTask(1, new EntityAIPhantomTarget(this));
     }
 
     @Override
@@ -50,17 +57,19 @@ public class EntityPhantom extends EntityFlying implements IMob {
         super.onUpdate();
         if (world.isRemote) {
             float offset = getEntityId() * 3f + ticksExisted;
-            float flap = (float) Math.cos(offset  * 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
-            float nextFlap = (float) Math.cos(offset  * 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
-            if (flap > 0 && nextFlap <= 0) playSound(PhantomsSoundEvents.PHANTOM_FLAP, 0.95f + rand.nextFloat() * 0.05f, 0.95f + rand.nextFloat() * 0.05f);
-            float angle = rotationYaw * (float) Math.PI / 180f;
+            float flap = (float) Math.cos(offset * 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
+            float nextFlap = (float) Math.cos((offset + 1)* 7.448451f * (float)Math.PI / 180f + (float)Math.PI);
+            if (flap > 0 && nextFlap <= 0) world.playSound(posX, posY, posZ, PhantomsSoundEvents.PHANTOM_FLAP, getSoundCategory(),
+                    0.95f + rand.nextFloat() * 0.05f, 0.95f + rand.nextFloat() * 0.05f, false);
+            float angle = rotationYawHead * (float) Math.PI / 180f;
             float wingX = (float) Math.cos(angle) * (1.3f + 0.21f * getSize());
-            float wingY = (0.3f + flap * 0.45f) * (getSize() * 0.2f + 1f);
+            float wingY = (0.3f - flap * 0.45f) * (getSize() * 0.2f + 1f);
             float wingZ = (float) Math.sin(angle) * (1.3f + 0.21f * getSize());
             world.spawnParticle(EnumParticleTypes.TOWN_AURA, posX + wingX, posY + wingY, posZ + wingZ, 0, 0, 0);
             world.spawnParticle(EnumParticleTypes.TOWN_AURA, posX - wingX, posY + wingY, posZ - wingZ, 0, 0, 0);
             return;
         }
+        getLookHelper().setLookPosition(moveHelper.getX(), moveHelper.getY(), moveHelper.getZ(), 180, 90);
         if (world.getDifficulty() == EnumDifficulty.PEACEFUL) setDead();
         if (!isEntityAlive() |! world.isDaytime() |! ConfigHandler.phantomsBurn) return;
         float light = getBrightness();
@@ -74,9 +83,32 @@ public class EntityPhantom extends EntityFlying implements IMob {
         if (helm.isItemStackDamageable()) helm.setItemDamage(helm.getItemDamage() + rand.nextInt(2));
     }
 
+    public boolean canTarget(EntityLivingBase target) {
+        if (target == null) return false;
+        return target instanceof EntityPlayer && getDistanceSq(target) < 4096 && target.isEntityAlive() &! ((EntityPlayer) target).isSpectator()
+                &! ((EntityPlayer) target).isCreative() && canEntityBeSeen(target) &! (getTeam() != null && getTeam().isSameTeam(target.getTeam()));
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (getAttackState() == AttackState.SWOOPING) setAttackState(AttackState.CIRCLING);
+        return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entity) {
+
+        return super.attackEntityAsMob(entity);
+    }
+
     @Override
     public boolean isEntityInvulnerable(DamageSource source) {
         return source != DamageSource.DROWN && super.isEntityInvulnerable(source);
+    }
+
+    @Override
+    public boolean hasNoGravity() {
+        return true;
     }
 
     @Override
@@ -85,6 +117,12 @@ public class EntityPhantom extends EntityFlying implements IMob {
     @Override
     public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) {
         return type == EnumCreatureType.MONSTER;
+    }
+
+
+    @Override
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
     }
 
     @Override
@@ -103,6 +141,9 @@ public class EntityPhantom extends EntityFlying implements IMob {
     }
 
     @Override
+    protected void playStepSound(BlockPos pos, Block block) {}
+
+    @Override
     protected ResourceLocation getLootTable() {
         return Constants.PHANTOM_DROPS;
     }
@@ -119,6 +160,48 @@ public class EntityPhantom extends EntityFlying implements IMob {
 
     public int getSize() {
         return dataManager.get(SIZE);
+    }
+
+    public AttackState getAttackState() {
+        return attackState;
+    }
+
+    public void setAttackState(AttackState attackState) {
+        this.attackState = attackState;
+    }
+
+    public BlockPos getTargetPos() {
+        return targetPos;
+    }
+
+    public void setTargetPos(BlockPos targetPos) {
+        this.targetPos = targetPos;
+    }
+
+
+    public enum AttackState {
+        CIRCLING,
+        SWOOPING;
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+        super.readEntityFromNBT(nbt);
+        if (nbt.hasKey("Size")) setSize(nbt.getInteger("Size"));
+        int ax = 0, ay = 0, az = 0;
+        if (nbt.hasKey("AX")) ax = nbt.getInteger("AX");
+        if (nbt.hasKey("AY")) ay = nbt.getInteger("AY");
+        if (nbt.hasKey("AZ")) az = nbt.getInteger("AZ");
+        targetPos = new BlockPos(ax, ay, az);
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound nbt) {
+        super.writeEntityToNBT(nbt);
+        nbt.setInteger("Size", getSize());
+        nbt.setInteger("AX", targetPos.getX());
+        nbt.setInteger("AY", targetPos.getY());
+        nbt.setInteger("AZ", targetPos.getZ());
     }
 
 }

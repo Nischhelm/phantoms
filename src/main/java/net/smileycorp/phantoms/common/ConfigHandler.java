@@ -1,8 +1,15 @@
 package net.smileycorp.phantoms.common;
 
+import com.google.common.collect.Lists;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.registries.GameData;
 import net.smileycorp.atlas.api.config.EntityAttributesEntry;
+import net.smileycorp.phantoms.common.entities.EntityPhantom;
+
+import java.util.List;
 
 public class ConfigHandler {
 
@@ -13,6 +20,8 @@ public class ConfigHandler {
     //phantoms
     public static EntityAttributesEntry phantomAttributes;
     public static boolean phantomsBurn;
+    private static String[] phantomRepellentEntitiesStr;
+    private static List<Class<? extends Entity>> phantomRepellentEntities;
 
     //spawning
     public static boolean phantomsSpawn;
@@ -35,6 +44,7 @@ public class ConfigHandler {
             //phantoms
             phantomAttributes = new EntityAttributesEntry(config, "Phantom", 0.7, 16, 2, 20, 0, 0, 0, 0.4);
             phantomsBurn = config.getBoolean("phantomsBurn", "Phantom", true, "Do phantoms burn in sunlight?");
+            phantomRepellentEntitiesStr = config.get("Phantom", "phantomRepellentEntities", new String[] {"minecraft:ocelot"}, "Which entities repel phantoms?").getStringList();
 
             //spawning
             phantomsSpawn = config.getBoolean("phantomsSpawn", "Spawning", true, "Do Phantoms Spawn?");
@@ -49,6 +59,32 @@ public class ConfigHandler {
         } finally {
             config.save();
         }
+    }
+
+    public static boolean repelsPhantoms(Entity entity) {
+        if (phantomRepellentEntities == null) {
+            phantomRepellentEntities = Lists.newArrayList();
+            for (String str : phantomRepellentEntitiesStr) {
+                try {
+                    Class<?> clazz = null;
+                    //check if it matches the syntax for a registry name
+                    if (str.contains(":")) {
+                        ResourceLocation loc = new ResourceLocation(str);
+                        if (GameData.getEntityRegistry().containsKey(loc)) {
+                            clazz = GameData.getEntityRegistry().getValue(loc).getEntityClass();
+                        } else continue;
+                    }
+                    if (clazz == null) throw new Exception("Entry " + str + " is not in the correct format");
+                    phantomRepellentEntities.add((Class<? extends Entity>) clazz);
+                    System.out.println("[Phantoms] Loaded hero of the village discount entity " + clazz + " as " + clazz.getName());
+                } catch (Exception e) {
+                    System.out.println("[Phantoms] Error adding hero of the village discount entity " + str + " " + e.getMessage());
+                }
+            }
+        }
+        if (entity instanceof EntityPhantom) return false;
+        for (Class<? extends Entity> clazz : phantomRepellentEntities) if (clazz.isAssignableFrom(entity.getClass())) return true;
+        return false;
     }
 
 }
