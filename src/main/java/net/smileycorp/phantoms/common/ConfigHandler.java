@@ -31,7 +31,9 @@ public class ConfigHandler {
     public static boolean invertSleeplessTicks;
     public static int spawnLight;
     public static int[] spawnDimensions;
+    public static int minSpawns;
     public static int spawnMax;
+    public static float extraSpawnsPerDifficulty;
 
     public static void syncConfig(FMLPreInitializationEvent event) {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
@@ -55,6 +57,8 @@ public class ConfigHandler {
             spawnLight = config.getInt("spawnLight", "Spawning", 7, 0, Integer.MAX_VALUE, "What is the maximum skylight Phantoms can spawn in? (Default is 7)");
             spawnDimensions = config.get("Spawning", "spawnDimensions", new int[] {0}, "Dimensions Phantoms can spawn in.").getIntList();
             spawnMax = config.getInt("spawnMax", "Spawning", 5, 0, Integer.MAX_VALUE, "How many Phantoms can be spawned in the world at once?");
+            minSpawns = config.getInt("minSpawns", "Spawning", 1, 0, 255, "Minimum number of Phantoms to spawn per group.");
+            extraSpawnsPerDifficulty = config.getFloat("extraSpawnsPerDifficulty", "Spawning", 1, 0, 255, "Maximum number of random Phantoms to be added to each group per game difficulty level (Rounded Down).");
         } catch (Exception e) {
         } finally {
             config.save();

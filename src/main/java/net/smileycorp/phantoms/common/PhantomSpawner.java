@@ -41,7 +41,7 @@ public class PhantomSpawner {
                     (ConfigHandler.invertSleeplessTicks && ticks >= ConfigHandler.sleeplessTicks)) return;
             BlockPos pos1 = pos.add(rand.nextInt(21) - 10, rand.nextInt(15) + 20, rand.nextInt(21) - 10);
             if (!world.isAirBlock(pos1)) continue;
-            for (int i = 0; i < 1 + rand.nextInt(world.getDifficulty().getDifficultyId() + 1); i++) {
+            for (int i = 0; i < ConfigHandler.minSpawns + rand.nextInt((int)(world.getDifficulty().getDifficultyId() * ConfigHandler.extraSpawnsPerDifficulty)); i++) {
                 EntityPhantom phantom = new EntityPhantom(world);
                 phantom.setPosition(pos1.getX() + 0.5f, pos1.getY(), pos1.getZ() + 0.5f);
                 world.spawnEntity(phantom);
