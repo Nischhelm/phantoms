@@ -19,9 +19,16 @@ public class ConfigHandler {
 
     //phantoms
     public static EntityAttributesEntry phantomAttributes;
+    public static double attackDamage;
+    public static double maxHealth;
     public static boolean phantomsBurn;
     private static String[] phantomRepellentEntitiesStr;
     private static List<Class<? extends Entity>> phantomRepellentEntities;
+    public static int minSize;
+    public static int maxSize;
+    public static float sizeIncreaseChance;
+    public static double attackDamageSizeIncrease;
+    public static double maxHealthSizeIncrease;
 
     //spawning
     public static boolean phantomsSpawn;
@@ -45,8 +52,15 @@ public class ConfigHandler {
 
             //phantoms
             phantomAttributes = new EntityAttributesEntry(config, "Phantom", 0.7, 16, 2, 20, 0, 0, 0, 0.4);
+            attackDamage = config.get("Phantom", "attackDamage", 2, "Attack Damage").getDouble();
+            maxHealth = config.get("Phantom", "maxHealth", 20, "Max Health").getDouble();
             phantomsBurn = config.getBoolean("phantomsBurn", "Phantom", true, "Do phantoms burn in sunlight?");
             phantomRepellentEntitiesStr = config.get("Phantom", "phantomRepellentEntities", new String[] {"minecraft:ocelot"}, "Which entities repel phantoms?").getStringList();
+            minSize = config.getInt("minSize", "Phantom", 0, 0, 64, "Minimum size of Phantoms");
+            maxSize = config.getInt("maxSize", "Phantom", 7, 0, 64, "Maximum size of Phantoms");
+            sizeIncreaseChance = config.getFloat("sizeIncreaseChance", "Phantom", 0.5f, 0, 1, "Chance for Phantoms to spawn increased a size.");
+            attackDamageSizeIncrease = config.get("Phantom", "attackDamageSizeIncrease", 1, "How much extra damage do Phantoms do per size?").getDouble();
+            maxHealthSizeIncrease = config.get("Phantom", "maxHealthSizeIncrease", 2, "How much extra health do Phantoms have per size?").getDouble();
 
             //spawning
             phantomsSpawn = config.getBoolean("phantomsSpawn", "Spawning", true, "Do Phantoms Spawn?");

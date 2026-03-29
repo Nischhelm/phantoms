@@ -13,12 +13,15 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.smileycorp.atlas.api.entity.ai.FlyingMoveControl;
 import net.smileycorp.phantoms.common.ConfigHandler;
 import net.smileycorp.phantoms.common.Constants;
 import net.smileycorp.phantoms.common.PhantomsSoundEvents;
+
+import javax.annotation.Nullable;
 
 public class EntityPhantom extends EntityFlying implements IMob {
 
@@ -50,6 +53,18 @@ public class EntityPhantom extends EntityFlying implements IMob {
         super.applyEntityAttributes();
         ConfigHandler.phantomAttributes.applyAttributes(this);
         setSize(0);
+    }
+
+    @Nullable
+    @Override
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        int size = ConfigHandler.minSize;
+        for (int i = 0; i < ConfigHandler.maxSize - ConfigHandler.minSize; i++) {
+            if (rand.nextFloat() > ConfigHandler.sizeIncreaseChance) break;
+            size++;
+        }
+        setSize(size);
+        return super.onInitialSpawn(difficulty, livingdata);
     }
 
     @Override
@@ -151,11 +166,21 @@ public class EntityPhantom extends EntityFlying implements IMob {
     public void setSize(int size) {
         size = MathHelper.clamp(size, 0, 64);
         dataManager.set(SIZE, size);
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(size == 0 ? 2 : 6 + size);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20 + size * 4);
-        float scale = 0.9f + (0.2f * size / 0.9f);
-        setSize(0.9f * scale, 0.5f * scale);
+        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(ConfigHandler.attackDamage + size * ConfigHandler.attackDamageSizeIncrease);
+        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.maxHealth + size * ConfigHandler.maxHealthSizeIncrease);
+        fixScale();
         experienceValue = (size + 1) * 5;
+    }
+
+    @Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        super.notifyDataManagerChange(key);
+        if (SIZE.equals(key)) fixScale();
+    }
+
+    private void fixScale() {
+        float scale = 0.9f + (0.2f * getSize() / 0.9f);
+        setSize(0.9f * scale, 0.5f * scale);
     }
 
     public int getSize() {

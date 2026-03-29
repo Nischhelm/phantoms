@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.smileycorp.phantoms.common.entities.EntityPhantom;
 
@@ -33,7 +34,8 @@ public class PhantomSpawner {
         for (EntityPlayerMP player : world.getPlayers(EntityPlayerMP.class, EntitySelectors.NOT_SPECTATING)) {
             BlockPos pos = player.getPosition();
             if (world.provider.hasSkyLight() && (pos.getY() < world.getSeaLevel() |! world.canSeeSky(pos))) continue;
-            if (!world.getDifficultyForLocation(pos).isHarderThan(rand.nextFloat() * 3f)) continue;
+            DifficultyInstance difficulty = world.getDifficultyForLocation(pos);
+            if (!difficulty.isHarderThan(rand.nextFloat() * 3f)) continue;
             NBTTagCompound nbt = player.getEntityData();
             if (!nbt.hasKey("ticksSinceLastSleep")) continue;
             int ticks = rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 0, Integer.MAX_VALUE));
@@ -44,6 +46,7 @@ public class PhantomSpawner {
             for (int i = 0; i < ConfigHandler.minSpawns + rand.nextInt((int)(world.getDifficulty().getDifficultyId() * ConfigHandler.extraSpawnsPerDifficulty)); i++) {
                 EntityPhantom phantom = new EntityPhantom(world);
                 phantom.setPosition(pos1.getX() + 0.5f, pos1.getY(), pos1.getZ() + 0.5f);
+                phantom.onInitialSpawn(difficulty, null);
                 world.spawnEntity(phantom);
             }
         }
