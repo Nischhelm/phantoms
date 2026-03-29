@@ -101,9 +101,9 @@ public class ConfigHandler {
                     }
                     if (clazz == null) throw new Exception("Entry " + str + " is not in the correct format");
                     phantomRepellentEntities.add((Class<? extends Entity>) clazz);
-                    System.out.println("[Phantoms] Loaded hero of the village discount entity " + clazz + " as " + clazz.getName());
+                    System.out.println("[Phantoms] Loaded Phantom repellent entity " + clazz + " as " + clazz.getName());
                 } catch (Exception e) {
-                    System.out.println("[Phantoms] Error adding hero of the village discount entity " + str + " " + e.getMessage());
+                    System.out.println("[Phantoms] Error adding Phantom repellent entity " + str + " " + e.getMessage());
                 }
             }
         }
