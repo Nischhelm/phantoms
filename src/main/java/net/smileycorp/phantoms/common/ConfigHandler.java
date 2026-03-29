@@ -3,6 +3,8 @@ package net.smileycorp.phantoms.common;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.registries.GameData;
@@ -41,6 +43,9 @@ public class ConfigHandler {
     public static int minSpawns;
     public static int spawnMax;
     public static float extraSpawnsPerDifficulty;
+    private static String[] spawnBiomesBlacklist;
+    private static List<Biome> spawnBiomes;
+    private static boolean spawnBiomesWhitelist;
 
     public static void syncConfig(FMLPreInitializationEvent event) {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
@@ -73,6 +78,8 @@ public class ConfigHandler {
             spawnMax = config.getInt("spawnMax", "Spawning", 5, 0, Integer.MAX_VALUE, "How many Phantoms can be spawned in the world at once?");
             minSpawns = config.getInt("minSpawns", "Spawning", 1, 0, 255, "Minimum number of Phantoms to spawn per group.");
             extraSpawnsPerDifficulty = config.getFloat("extraSpawnsPerDifficulty", "Spawning", 1, 0, 255, "Maximum number of random Phantoms to be added to each group per game difficulty level (Rounded Down).");
+            spawnBiomesBlacklist = config.get("Spawning", "spawnBiomesBlacklist", new String[] {}, "Biomes phantoms can't spawn in (Can specify either biomes names or Biome Dictionaries e.g. minecraft:plains, FOREST)?").getStringList();
+            spawnBiomesWhitelist = config.getBoolean("spawnBiomesWhitelist", "Spawning", false, "Invert spawnBiomesBlacklist so that Phantoms can only spawn in the specified biome.");
         } catch (Exception e) {
         } finally {
             config.save();
@@ -103,6 +110,32 @@ public class ConfigHandler {
         if (entity instanceof EntityPhantom) return false;
         for (Class<? extends Entity> clazz : phantomRepellentEntities) if (clazz.isAssignableFrom(entity.getClass())) return true;
         return false;
+    }
+
+    public static boolean canSpawn(Biome biome) {
+        if (spawnBiomes == null) {
+            spawnBiomes = Lists.newArrayList();
+            for (String str : spawnBiomesBlacklist) {
+                if (str.contains(":")) {
+                    try {
+                        Biome biome1 = Biome.REGISTRY.getObject(new ResourceLocation(str));
+                        if (biome1 != null) spawnBiomes.add(biome1);
+                        else System.out.println("[Phantoms] Biome " + str + " is not registered");
+                    } catch (Exception e) {
+                        System.out.println("[Phantoms] " + str + " is not a valid registry name");
+                    }
+                }
+                else {
+                    try {
+                        BiomeDictionary.Type type = BiomeDictionary.Type.getType(str);
+                        for (Biome biome1 : BiomeDictionary.getBiomes(type)) spawnBiomes.add(biome1);
+                    } catch (Exception e) {
+                        System.out.println("[Phantoms] " + str + " is not a valid registry name");
+                    }
+                }
+            }
+        }
+        return spawnBiomesWhitelist == spawnBiomes.contains(biome);
     }
 
 }

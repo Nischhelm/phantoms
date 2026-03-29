@@ -33,6 +33,7 @@ public class PhantomSpawner {
         if (ConfigHandler.spawnDelayVariation > 0) nextSpawn += rand.nextInt(ConfigHandler.spawnDelayVariation);
         for (EntityPlayerMP player : world.getPlayers(EntityPlayerMP.class, EntitySelectors.NOT_SPECTATING)) {
             BlockPos pos = player.getPosition();
+            if (!ConfigHandler.canSpawn(world.getBiome(pos))) return;
             if (world.provider.hasSkyLight() && (pos.getY() < world.getSeaLevel() |! world.canSeeSky(pos))) continue;
             DifficultyInstance difficulty = world.getDifficultyForLocation(pos);
             if (!difficulty.isHarderThan(rand.nextFloat() * 3f)) continue;
