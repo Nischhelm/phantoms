@@ -42,7 +42,7 @@ public class PhantomSpawner {
             int ticks = rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 0, Integer.MAX_VALUE));
             if ((!ConfigHandler.invertSleeplessTicks && ticks < ConfigHandler.sleeplessTicks) ||
                     (ConfigHandler.invertSleeplessTicks && ticks >= ConfigHandler.sleeplessTicks)) return;
-            BlockPos pos1 = pos.add(rand.nextInt(21) - 10, rand.nextInt(15) + 20, rand.nextInt(21) - 10);
+            BlockPos pos1 = pos.add(rand.nextInt(21) - 10, rand.nextInt(15) - 10 + ConfigHandler.phantomCircleHeight, rand.nextInt(21) - 10);
             if (!world.isAirBlock(pos1)) continue;
             for (int i = 0; i < ConfigHandler.minSpawns + rand.nextInt((int)(world.getDifficulty().getDifficultyId() * ConfigHandler.extraSpawnsPerDifficulty)); i++) {
                 EntityPhantom phantom = new EntityPhantom(world);

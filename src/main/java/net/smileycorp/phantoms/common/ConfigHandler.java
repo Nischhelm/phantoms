@@ -31,6 +31,7 @@ public class ConfigHandler {
     public static float sizeIncreaseChance;
     public static double attackDamageSizeIncrease;
     public static double maxHealthSizeIncrease;
+    public static int phantomCircleHeight;
 
     //spawning
     public static boolean phantomsSpawn;
@@ -66,6 +67,7 @@ public class ConfigHandler {
             sizeIncreaseChance = config.getFloat("sizeIncreaseChance", "Phantom", 0.5f, 0, 1, "Chance for Phantoms to spawn increased a size.");
             attackDamageSizeIncrease = config.get("Phantom", "attackDamageSizeIncrease", 1, "How much extra damage do Phantoms do per size?").getDouble();
             maxHealthSizeIncrease = config.get("Phantom", "maxHealthSizeIncrease", 2, "How much extra health do Phantoms have per size?").getDouble();
+            phantomCircleHeight = config.getInt("phantomCircleHeight", "Phantom", 30, Integer.MIN_VALUE, Integer.MAX_VALUE, "The average height above the ground or target Phantoms spawn and perform their circling ai at.");
 
             //spawning
             phantomsSpawn = config.getBoolean("phantomsSpawn", "Spawning", true, "Do Phantoms Spawn?");

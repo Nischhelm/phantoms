@@ -1,11 +1,13 @@
 package net.smileycorp.phantoms.common.entities;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.smileycorp.atlas.api.util.DirectionUtils;
+import net.smileycorp.phantoms.common.ConfigHandler;
 
 import java.util.Random;
 
@@ -73,7 +75,11 @@ public class EntityAIPhantomCircle extends EntityAIBase {
     }
 
     private void findNext() {
-        if (phantom.getTargetPos().equals(BlockPos.ORIGIN)) phantom.setTargetPos(phantom.getPosition());
+        if (phantom.getTargetPos().equals(BlockPos.ORIGIN)) {
+            EntityLivingBase target = phantom.getAttackTarget();
+            phantom.setTargetPos((target == null ? phantom.world.getHeight(phantom.getPosition())
+                    : target.getPosition()).up(ConfigHandler.phantomCircleHeight));
+        }
         angle = MathHelper.wrapDegrees(angle + (clockwise ? -15 : 15));
         BlockPos target = phantom.getTargetPos();
         nextPos = new Vec3d(target.getX() + 0.5, target.getY() + height -4, target.getZ() + 0.5)

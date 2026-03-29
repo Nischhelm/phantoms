@@ -3,6 +3,7 @@ package net.smileycorp.phantoms.common.entities;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.smileycorp.phantoms.common.ConfigHandler;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class EntityAIPhantomTarget extends EntityAIBase {
         if (players.isEmpty()) return false;
         EntityPlayer target = players.stream().min((p1, p2) -> Double.compare(p2.posY, p1.posY)).get();
         phantom.setAttackTarget(target);
-        phantom.setTargetPos(target.getPosition().up(30));
+        phantom.setTargetPos(target.getPosition().up(ConfigHandler.phantomCircleHeight));
         return true;
     }
 
