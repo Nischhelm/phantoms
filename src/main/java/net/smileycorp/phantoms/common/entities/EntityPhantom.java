@@ -166,10 +166,10 @@ public class EntityPhantom extends EntityFlying implements IMob {
     public void setSize(int size) {
         size = MathHelper.clamp(size, 0, 64);
         dataManager.set(SIZE, size);
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(ConfigHandler.attackDamage + size * ConfigHandler.attackDamageSizeIncrease);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.maxHealth + size * ConfigHandler.maxHealthSizeIncrease);
+        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(ConfigHandler.phantomAttributes.getAttackDamage() + size * ConfigHandler.attackDamageSizeIncrease);
+        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.phantomAttributes.getMaxHealth() + size * ConfigHandler.maxHealthSizeIncrease);
         fixScale();
-        experienceValue = (size + 1) * 5;
+        experienceValue = ConfigHandler.xpDrop + (int) (ConfigHandler.xpPerSize * (float) size);
     }
 
     @Override

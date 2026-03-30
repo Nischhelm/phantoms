@@ -21,8 +21,6 @@ public class ConfigHandler {
 
     //phantoms
     public static EntityAttributesEntry phantomAttributes;
-    public static double attackDamage;
-    public static double maxHealth;
     public static boolean phantomsBurn;
     private static String[] phantomRepellentEntitiesStr;
     private static List<Class<? extends Entity>> phantomRepellentEntities;
@@ -32,6 +30,8 @@ public class ConfigHandler {
     public static double attackDamageSizeIncrease;
     public static double maxHealthSizeIncrease;
     public static int phantomCircleHeight;
+    public static int xpDrop;
+    public static float xpPerSize;
 
     //spawning
     public static boolean phantomsSpawn;
@@ -58,8 +58,6 @@ public class ConfigHandler {
 
             //phantoms
             phantomAttributes = new EntityAttributesEntry(config, "Phantom", 0.7, 16, 2, 20, 0, 0, 0, 0.4);
-            attackDamage = config.get("Phantom", "attackDamage", 2, "Attack Damage").getDouble();
-            maxHealth = config.get("Phantom", "maxHealth", 20, "Max Health").getDouble();
             phantomsBurn = config.getBoolean("phantomsBurn", "Phantom", true, "Do phantoms burn in sunlight?");
             phantomRepellentEntitiesStr = config.get("Phantom", "phantomRepellentEntities", new String[] {"minecraft:ocelot"}, "Which entities repel phantoms?").getStringList();
             minSize = config.getInt("minSize", "Phantom", 0, 0, 64, "Minimum size of Phantoms");
@@ -68,6 +66,8 @@ public class ConfigHandler {
             attackDamageSizeIncrease = config.get("Phantom", "attackDamageSizeIncrease", 1, "How much extra damage do Phantoms do per size?").getDouble();
             maxHealthSizeIncrease = config.get("Phantom", "maxHealthSizeIncrease", 2, "How much extra health do Phantoms have per size?").getDouble();
             phantomCircleHeight = config.getInt("phantomCircleHeight", "Phantom", 30, Integer.MIN_VALUE, Integer.MAX_VALUE, "The average height above the ground or target Phantoms spawn and perform their circling ai at.");
+            xpDrop = config.getInt("xpDrop", "Phantom", 5, Integer.MIN_VALUE, Integer.MAX_VALUE, "How much XP do Phantoms drop?");
+            xpPerSize = config.getFloat("xpPerSize", "Phantom", 2, Integer.MIN_VALUE, Integer.MAX_VALUE, "How much does the XP Phantoms drop increase by with size?");
 
             //spawning
             phantomsSpawn = config.getBoolean("phantomsSpawn", "Spawning", true, "Do Phantoms Spawn?");
