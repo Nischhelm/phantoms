@@ -39,12 +39,12 @@ public class PhantomSpawner {
             if (!difficulty.isHarderThan(rand.nextFloat() * 3f)) continue;
             NBTTagCompound nbt = player.getEntityData();
             if (!nbt.hasKey("ticksSinceLastSleep")) continue;
-            int ticks = rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 0, Integer.MAX_VALUE));
+            int ticks = rand.nextInt((int) MathHelper.clamp(nbt.getLong("ticksSinceLastSleep"), 1, Integer.MAX_VALUE));
             if ((!ConfigHandler.invertSleeplessTicks && ticks < ConfigHandler.sleeplessTicks) ||
                     (ConfigHandler.invertSleeplessTicks && ticks >= ConfigHandler.sleeplessTicks)) return;
             BlockPos pos1 = pos.add(rand.nextInt(21) - 10, rand.nextInt(15) - 10 + ConfigHandler.phantomCircleHeight, rand.nextInt(21) - 10);
             if (!world.isAirBlock(pos1)) continue;
-            for (int i = 0; i < ConfigHandler.minSpawns + rand.nextInt((int)(world.getDifficulty().getDifficultyId() * ConfigHandler.extraSpawnsPerDifficulty)); i++) {
+            for (int i = 0; i < ConfigHandler.minSpawns + rand.nextInt(Math.max((int)(world.getDifficulty().getDifficultyId() * ConfigHandler.extraSpawnsPerDifficulty), 1)); i++) {
                 EntityPhantom phantom = new EntityPhantom(world);
                 phantom.setPosition(pos1.getX() + 0.5f, pos1.getY(), pos1.getZ() + 0.5f);
                 phantom.onInitialSpawn(difficulty, null);

@@ -5,6 +5,7 @@
   "package": "net.smileycorp.phantoms.mixin",
   "refmap": "mixins.phantoms.refmap.json",
   "mixins": [
+    "MixinBlockBed",
     "MixinEntityLivingBase",
     "MixinItemElytra"
   ],

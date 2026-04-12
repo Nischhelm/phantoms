@@ -5,14 +5,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -62,14 +60,6 @@ public class CommonProxy {
 		if (player.world.isRemote) return;
 		NBTTagCompound nbt = player.getEntityData();
 		nbt.setLong("ticksSinceLastSleep", nbt.hasKey("ticksSinceLastSleep") ? nbt.getInteger("ticksSinceLastSleep") + 1 : 1);
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void playerSleep(PlayerSleepInBedEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
-		if (player.world.isRemote || event.getResultStatus() != EntityPlayer.SleepResult.OK) return;
-		NBTTagCompound nbt = player.getEntityData();
-		nbt.setLong("ticksSinceLastSleep", 0);
 	}
 	
 }
